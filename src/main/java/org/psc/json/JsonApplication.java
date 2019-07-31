@@ -44,7 +44,7 @@ public class JsonApplication {
 
         @Autowired
         public void configure(ObjectMapper objectMapper) {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             log.info("hi");
         }
 
