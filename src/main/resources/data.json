@@ -1,0 +1,37 @@
+{
+  "name": "My name",
+  "discreteValue": 555,
+  "subData": [
+    {
+      "name": "my first sub",
+      "discreteValue": 1
+    },
+    {
+      "name": "my second sub",
+      "discreteValue": 2
+    },
+    {
+      "name": "a dummy",
+      "discreteValue": -999
+    }
+  ],
+  "embedded": {
+    "id": 12345,
+    "description": "something something something",
+    "value": -44.25
+  },
+  "wrappedData": [
+    {
+      "value": 5
+    },
+    {
+      "value": 7
+    },
+    {
+      "value": -999
+    },
+    {
+      "value": -999
+    }
+  ]
+}
