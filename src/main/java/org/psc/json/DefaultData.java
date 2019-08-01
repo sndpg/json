@@ -1,10 +1,14 @@
 package org.psc.json;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 public class DefaultData {
@@ -15,12 +19,15 @@ public class DefaultData {
     @JsonDeserialize(using = ConditionalNullDeserializer.class)
     private Integer discreteValue;
 
-    List<SubData> subData;
+    private List<SubData> subData;
 
-    Map<String, Object> embeddedValues;
+    private Map<String, Object> embeddedValues;
 
-    @JsonDeserialize(contentUsing = ConditionalNullDeserializer.class)
-    @NullIf("-999")
-    List<WrappedData> wrappedData;
+    private List<WrappedData> wrappedData;
+
+//    @JsonSetter(nulls = Nulls.SKIP, contentNulls = Nulls.SKIP)
+//    public void setWrappedData(List<WrappedData> wrappedData) {
+//        this.wrappedData = wrappedData.stream().filter(Objects::nonNull).collect(Collectors.toList());
+//    }
 
 }

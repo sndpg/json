@@ -1,7 +1,9 @@
 package org.psc.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -31,9 +33,12 @@ public class JsonApplication {
     @EventListener(ApplicationReadyEvent.class)
     public void doSomething() throws IOException {
         var data = new ClassPathResource("data.json");
+
         var defaultData = objectMapper.readValue(data.getInputStream(), DefaultData.class);
 
-        log.info(objectMapper.writeValueAsString(defaultData));
+        var result = objectMapper.writeValueAsString(defaultData);
+
+        log.info(result);
 
         SpringApplication.exit(applicationContext);
     }
@@ -45,6 +50,9 @@ public class JsonApplication {
         @Autowired
         public void configure(ObjectMapper objectMapper) {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            var filteringSerializersModule = new SimpleModule();
+            filteringSerializersModule.setSerializers(new FilteringSerializers(new ObjectMapper()));
+         //   objectMapper.registerModule(filteringSerializersModule);
             log.info("hi");
         }
 
