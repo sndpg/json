@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class WrappedData {
-    @JsonDeserialize(using = ConditionalNullDeserializer.class)
-    @NullIf("-999")
+//    @NullIf("-999")
+//    @JsonDeserialize(using = ConditionalNullDeserializer.class)
+    @NullIf("-1")
     private Integer value;
 }

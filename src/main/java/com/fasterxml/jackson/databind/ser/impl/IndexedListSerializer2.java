@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ser.std.AsArraySerializerBase;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -21,27 +20,27 @@ import java.util.stream.Collectors;
  * that cannot}.
  */
 @JacksonStdImpl
-public final class IndexedListSerializer extends AsArraySerializerBase<List<?>> {
+public final class IndexedListSerializer2 extends AsArraySerializerBase<List<?>> {
     private static final long serialVersionUID = 1L;
 
     private static final Set<Class<?>> BASE_TYPES =
             Set.of(Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class,
                     Double.class, Void.class, String.class);
 
-    public IndexedListSerializer(JavaType elemType, boolean staticTyping, TypeSerializer vts,
-                                 JsonSerializer<Object> valueSerializer) {
+    public IndexedListSerializer2(JavaType elemType, boolean staticTyping, TypeSerializer vts,
+                                  JsonSerializer<Object> valueSerializer) {
         super(List.class, elemType, staticTyping, vts, valueSerializer);
     }
 
-    public IndexedListSerializer(IndexedListSerializer src, BeanProperty property, TypeSerializer vts,
-                                 JsonSerializer<?> valueSerializer, Boolean unwrapSingle) {
+    public IndexedListSerializer2(IndexedListSerializer2 src, BeanProperty property, TypeSerializer vts,
+                                  JsonSerializer<?> valueSerializer, Boolean unwrapSingle) {
         super(src, property, vts, valueSerializer, unwrapSingle);
     }
 
     @Override
-    public IndexedListSerializer withResolved(BeanProperty property, TypeSerializer vts,
-                                              JsonSerializer<?> elementSerializer, Boolean unwrapSingle) {
-        return new IndexedListSerializer(this, property, vts, elementSerializer, unwrapSingle);
+    public IndexedListSerializer2 withResolved(BeanProperty property, TypeSerializer vts,
+                                               JsonSerializer<?> elementSerializer, Boolean unwrapSingle) {
+        return new IndexedListSerializer2(this, property, vts, elementSerializer, unwrapSingle);
     }
 
     /*
@@ -62,12 +61,11 @@ public final class IndexedListSerializer extends AsArraySerializerBase<List<?>> 
 
     @Override
     public ContainerSerializer<?> _withValueTypeSerializer(TypeSerializer vts) {
-        return new IndexedListSerializer(this, _property, vts, _elementSerializer, _unwrapSingle);
+        return new IndexedListSerializer2(this, _property, vts, _elementSerializer, _unwrapSingle);
     }
 
     @Override
     public final void serialize(List<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        final int len = value.size();
 
         value = value.stream().filter(e -> {
             try {
@@ -77,6 +75,8 @@ public final class IndexedListSerializer extends AsArraySerializerBase<List<?>> 
             }
             return true;
         }).collect(Collectors.toList());
+
+        final int len = value.size();
 
         if (len == 1) {
             if (((_unwrapSingle == null) &&

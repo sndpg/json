@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
@@ -37,6 +38,9 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
         Class<?> clazz = property.getType().getRawClass();
         NullIf nullIf = property.getAnnotation(NullIf.class);
 
+
+        NullIf nullIf2 = property.getType().getContentType().getRawClass().getAnnotation(NullIf.class);
+
         Object result = null;
         if (nullIf != null) {
             String value = nullIf.value();
@@ -45,10 +49,11 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
 
             if (node.getNodeType() == JsonNodeType.OBJECT) {
                 Iterator<JsonNode> nodeIterator = node.elements();
-                while(nodeIterator.hasNext()){
+                while (nodeIterator.hasNext()) {
                     result = getNodeValue(nodeIterator.next(), value);
-                    if (result == null){
-                       log.info("I should be removed... please, I beg you");
+                    if (result == null) {
+                        nodeIterator.remove();;
+                        log.info("I should be removed... please, I beg you");
                     }
                 }
             } else {
@@ -56,15 +61,11 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
             }
         }
 
-        if (result == null){
-            jsonParser.clearCurrentToken();
-        }
-
         return result;
     }
 
 
-    private Object getNodeValue(JsonNode node, String value){
+    private Object getNodeValue(JsonNode node, String value) {
         Object result = null;
 
         switch (node.getNodeType()) {
@@ -103,4 +104,5 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
         }
         return result;
     }
+
 }

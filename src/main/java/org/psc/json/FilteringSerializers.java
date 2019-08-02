@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
-import com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer;
+import com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer2;
 import com.fasterxml.jackson.databind.ser.impl.IndexedStringListSerializer;
 import com.fasterxml.jackson.databind.ser.impl.StringCollectionSerializer;
 import com.fasterxml.jackson.databind.ser.std.CollectionSerializer;
@@ -92,7 +92,7 @@ public class FilteringSerializers extends SimpleSerializers {
     public ContainerSerializer<?> buildIndexedListSerializer(JavaType elemType, boolean staticTyping,
                                                              TypeSerializer vts,
                                                              JsonSerializer<Object> valueSerializer) {
-        return new IndexedListSerializer(elemType, staticTyping, vts, valueSerializer);
+        return new IndexedListSerializer2(elemType, staticTyping, vts, valueSerializer);
     }
 
     public ContainerSerializer<?> buildCollectionSerializer(JavaType elemType, boolean staticTyping, TypeSerializer vts,
