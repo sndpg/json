@@ -7,11 +7,17 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.std.CollectionDeserializer;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class NullFilteringCollectionDeserializer extends CollectionDeserializer {
+
+    private static final Set<Class<?>> BASE_TYPES =
+            Set.of(Boolean.class, Character.class, Byte.class, Short.class, Integer.class, Long.class, Float.class,
+                    Double.class, Void.class, String.class);
+
     protected NullFilteringCollectionDeserializer(CollectionDeserializer src) {
         super(src);
     }
@@ -27,6 +33,37 @@ public class NullFilteringCollectionDeserializer extends CollectionDeserializer 
                                           DeserializationContext deserializationContext) throws IOException {
         Collection<Object> collection = super.deserialize(jsonParser, deserializationContext);
 
-        return collection.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        return collection.stream()
+                .filter(e -> !NullFilteringCollectionDeserializer.checkAllFieldsNull(e))
+                .collect(Collectors.toList());
+    }
+
+    private static boolean checkAllFieldsNull(Object object) {
+        if (object == null) {
+            return true;
+        }
+        Class<?> clazz = object.getClass();
+        if (BASE_TYPES.contains(clazz)) {
+            return false;
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+        boolean allFieldsNull = fields.length > 0;
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object currentObject = null;
+            try {
+                currentObject = field.get(object);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (currentObject != null) {
+                allFieldsNull &= checkAllFieldsNull(currentObject);
+            }
+            field.setAccessible(false);
+        }
+
+        return allFieldsNull;
     }
 }

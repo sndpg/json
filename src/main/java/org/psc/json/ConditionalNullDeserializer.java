@@ -39,7 +39,7 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
         NullIf nullIf = property.getAnnotation(NullIf.class);
 
 
-        NullIf nullIf2 = property.getType().getContentType().getRawClass().getAnnotation(NullIf.class);
+//        NullIf nullIf2 = property.getType().getContentType().getRawClass().getAnnotation(NullIf.class);
 
         Object result = null;
         if (nullIf != null) {
