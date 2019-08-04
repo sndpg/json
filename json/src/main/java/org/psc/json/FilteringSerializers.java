@@ -48,7 +48,7 @@ public class FilteringSerializers extends SimpleSerializers {
                                                           BeanDescription beanDesc,
                                                           TypeSerializer elementTypeSerializer,
                                                           JsonSerializer<Object> elementValueSerializer) {
-        log.info(beanDesc.getType().toString());
+//        log.info(beanDesc.getType().toString());
         if (listFilterSerializer == null) {
             listFilterSerializer =
                     new ListFilterSerializer(objectMapper, createSerializer(type, elementTypeSerializer, elementValueSerializer));

@@ -1,14 +1,13 @@
 package org.psc.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import com.fasterxml.jackson.databind.ser.ContainerSerializer;
-import com.fasterxml.jackson.databind.ser.std.AsArraySerializerBase;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +41,7 @@ public class ListFilterSerializer extends JsonSerializer {
         if (value instanceof List) {
             values = ((List<?>) value).stream().filter(Objects::nonNull).collect(Collectors.toList());
         }
-        log.info(value.toString());
+//        log.info(value.toString());
         serializer.serialize(values, gen, serializers);
 
     }

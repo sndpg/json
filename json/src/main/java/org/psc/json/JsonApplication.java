@@ -54,7 +54,7 @@ public class JsonApplication {
 
         var result = objectMapper.writeValueAsString(defaultData);
 
-        log.info(result);
+//        log.info(result);
 
         SpringApplication.exit(applicationContext);
     }
@@ -142,7 +142,7 @@ public class JsonApplication {
 
             //   objectMapper.registerModule(filteringSerializersModule);
             objectMapper.registerModule(new CustomCollectionDeserializerModule());
-            log.info("hi");
+//            log.info("hi");
         }
 
     }

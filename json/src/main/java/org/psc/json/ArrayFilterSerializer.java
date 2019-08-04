@@ -13,6 +13,6 @@ public class ArrayFilterSerializer extends JsonSerializer {
 
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        log.info(value.toString());
+//        log.info(value.toString());
     }
 }

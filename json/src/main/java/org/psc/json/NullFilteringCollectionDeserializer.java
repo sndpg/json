@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.std.CollectionDeserializer;
+import io.vavr.control.Try;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class NullFilteringCollectionDeserializer extends CollectionDeserializer {
@@ -52,12 +54,8 @@ public class NullFilteringCollectionDeserializer extends CollectionDeserializer 
 
         for (Field field : fields) {
             field.setAccessible(true);
-            Object currentObject = null;
-            try {
-                currentObject = field.get(object);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            Object currentObject = Try.of(() -> field.get(object))
+                    .getOrElseThrow((Function<Throwable, RuntimeException>) RuntimeException::new);
             if (currentObject != null) {
                 allFieldsNull &= checkAllFieldsNull(currentObject);
             }

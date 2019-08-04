@@ -34,7 +34,7 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
     @Override
     public Object deserialize(JsonParser jsonParser,
                               DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        log.info(property.getName());
+//        log.info(property.getName());
         Class<?> clazz = property.getType().getRawClass();
         NullIf nullIf = property.getAnnotation(NullIf.class);
 
@@ -53,7 +53,7 @@ public class ConditionalNullDeserializer extends JsonDeserializer implements Con
                     result = getNodeValue(nodeIterator.next(), value);
                     if (result == null) {
                         nodeIterator.remove();;
-                        log.info("I should be removed... please, I beg you");
+//                        log.info("I should be removed... please, I beg you");
                     }
                 }
             } else {
